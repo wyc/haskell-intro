@@ -112,7 +112,7 @@ Prelude> take 5 [1..]
 You don't need category theory, abstract algebra, or graduate-level algorithms
 to use or understand Haskell.
 
-# Getting Started (1/3)
+# Getting Started (1/4)
 
 1. Install Glasgow Haskell Compiler (GHC) for GNU/Linux, Mac OSX, or Windows
    from <https://www.haskell.org/ghc/>
@@ -129,7 +129,7 @@ $ ./hello
 Hello, World!
 ```
 
-# Getting Started (2/3)
+# Getting Started (2/4)
 
 4. Write a function to use in GHC's interactive environment, `ghci`. `myfuncs.hs`:
 ```haskell
@@ -1749,7 +1749,7 @@ venture:
 
 - Start with Learn You a Haskell by Miran Lipovača, <http://learnyouahaskell.com>
 
-- My personal favorite explanation after somewhat grasping the concept was You Could Have Invented Monads! by sigfpe. The practice problem were immensely helpful in consolidating my knowledge, <http://blog.sigfpe.com/2006/08/you-could-have-invented-monads-and.html>
+- My personal favorite explanation after somewhat grasping the concept was You Could Have Invented Monads! by sigfpe. The practice problems were immensely helpful in consolidating my knowledge, <http://blog.sigfpe.com/2006/08/you-could-have-invented-monads-and.html>
 
 - There are so many monad tutorials that Haskell Wiki gave it a whole section called "Monad tutorials timeline" with dozens of them from over the years, <https://wiki.haskell.org/Monad_tutorials_timeline>
 
