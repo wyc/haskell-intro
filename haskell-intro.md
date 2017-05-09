@@ -1121,7 +1121,7 @@ data ApptTime = NotScheduled | WalkIn | At UTCTime
 --                  and UTCTime to form a new type.
 --                  They're "glued" together.
 
-apptStatus :: AppTime -> String
+apptStatus :: ApptTime -> String
 apptStatus apptTime = case apptTime of
     NotScheduled -> "Not currently scheduled."
     WalkIn -> "Walk in during business hours."
