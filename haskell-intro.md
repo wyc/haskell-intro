@@ -2,6 +2,15 @@
 % Wayne Chang (wayne@wyc.io)
 % May 8th, 2017
 
+# Slides and Exercises
+
+After installing Git, you can run this command to download the slides and
+exercises.
+
+```bash
+$ git clone https://github.com/wyc/haskell-intro.git
+```
+
 # Table of Contents
 
 These slides _attempt_ to cover:
@@ -112,33 +121,78 @@ Prelude> take 5 [1..]
 You don't need category theory, abstract algebra, or graduate-level algorithms
 to use or understand Haskell.
 
-# Getting Started (1/4)
+# Hello, functional programming
 
-1. Install Glasgow Haskell Compiler (GHC) for GNU/Linux, Mac OSX, or Windows
-   from <https://www.haskell.org/ghc/>
-2. Write `hello.hs`:
+To to remove the first three elements:
+
+OOP-like:
+
+```java
+[1,2,3,4,5].drop(3)  // [4,5]
+```
+
+Functional:
+```haskell
+drop 3 [1,2,3,4,5]  -- [4,5]
+```
+
+In functional programming, we focus on the functions! When you focus on the
+objects themselves, you're "object-oriented".
+
+# Functional programming
+
+Focus on functions.
+
+- We ask "what can this function operate on?" and not "what can this object do?"
+- What if we didn't have countless POJOs, and instead some core functions that
+  we can use over and over again?
+
+Composability is key!
+
+```haskell
+Prelude> map (drop 1) [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+[[2,3],[5,6],[8,9]]
+```
+
+# Getting Started (1/5)
+
+1. Install Stack and the Glasgow Haskell Compiler (GHC) for GNU/Linux, Mac OSX, or Windows
+   from <https://docs.haskellstack.org/en/stable/README/>
+2. Setup Stack.
+```bash
+$ stack setup
+```
+3. Write `hello.hs`:
 ```haskell
 main :: IO ()
 main = do
     putStrLn "Hello, World!"
 ```
-3. Compile it and run!
+
+# Getting Started (2/5)
+4. Compile it and run!
 ```bash
-$ ghc hello.hs
+$ stack ghc hello.hs
 $ ./hello
 Hello, World!
 ```
+5.  Alternatively, you can use runhaskell:
+```bash
+$ stack runhaskell hello.hs
+Hello, World!
+```
 
-# Getting Started (2/4)
+# Getting Started (3/5)
 
-4. Write a function to use in GHC's interactive environment, `ghci`. `myfuncs.hs`:
+7. Write a function to use in GHC's interactive environment, `ghci`. `myfuncs.hs`:
 ```haskell
 salesTax :: Double -> Double
 salesTax price = price * 0.089
 ```
-5. Enter the `ghci` shell and load your source file.
+6. Enter the `ghci` shell and load your source file.
 ```haskell
-$ ghci
+$ stack ghci
 GHCi, version 8.0.2: http://www.haskell.org/ghc/
 Prelude> :load myfuncs
 [1 of 1] Compiling Main ( myfuncs.hs, interpreted )
@@ -147,9 +201,9 @@ Ok, modules loaded: Main.
 8.9
 ```
 
-# Getting Started (3/4)
+# Getting Started (4/5)
 
-6. Importing modules:
+7. Importing modules:
 
 ```haskell
 -- Haskell
@@ -170,11 +224,11 @@ ord('a')    # 97
 C.ord('a')  # 97
 ```
 
-# Getting Started (4/4)
+# Getting Started (5/5)
 
-7. Try importing from `ghci`.
+8. Try importing from `ghci`.
 ```haskell
-$ ghci
+$ stack ghci
 GHCi, version 8.0.2: http://www.haskell.org/ghc/
 Prelude> import Data.Char (ord)
 Prelude Data.Char> ord 'a'
@@ -182,6 +236,9 @@ Prelude Data.Char> ord 'a'
 ```
 
 # Basic Types
+
+Types start with a Capital letter, variables (including functions and type
+variables) start with lowercase.
 
 - `Int`
     - Fixed-Precision Whole Number
@@ -422,6 +479,46 @@ Prelude> (addFive :: Int -> Int) 1.2 -- BOOM!
       it = (addFive :: Int -> Int) 1.2
 ```
 
+# Currying (1/2)
+
+Currying is the process of transforming a function that takes multiple
+arguments into a function that takes just a single argument and returns another
+function if any arguments are still needed.
+
+```haskell
+-- Uncurried
+add (x, y) = x + y
+add (5, 2)
+```
+
+Curried forms are preferred because they allow for partial application:
+
+```haskell
+-- Curried
+add x y = x + y
+addFive = add 5
+addFive 2
+```
+
+# Currying (2/2)
+
+```haskell
+add :: Int -> Int -> Int
+add = \(x, y) -> x + y
+
+add :: Int -> Int -> Int
+add x y = x + y
+
+add :: Int -> (Int -> Int)
+add x = (\y -> x + y)
+
+add :: (Int -> (Int -> Int))
+add = (\x -> (\y -> x + y))
+
+-- Arrow is Right-Associative
+-- (Int -> Int -> Int) is (Int -> (Int -> Int))
+```
+
 # Reading the Type of `map` (1/3)
 
 ```haskell
@@ -494,7 +591,7 @@ Prelude> :t [False,True,False]
 [False,True,False] :: [Bool]
 ```
 
-# Reading Typeclasses (1/3)
+# Reading Typeclasses (1/5)
 
 `Num` is a typeclass that defines some common numeric operations. Think
 interfaces in Java or Go, except that typeclasses apply to types.
@@ -506,7 +603,40 @@ addFive :: Num a => a -> a
 Prelude> addFive 1.2
 6.2
 ```
-# Reading Typeclasses (2/3)
+
+# Reading Typeclasses (2/5)
+
+List function examples:
+
+```haskell
+fst :: (a,b) -> a
+
+head :: [a] -> a
+
+take :: Int -> [a] -> [a]
+
+zip :: [a] -> [b] -> [(a,b)]
+
+id :: a -> a
+```
+
+# Reading Typeclasses (3/5)
+
+Abbreviated examples:
+
+```haskell
+sum :: Num a => [a] -> a
+sum = foldl (+) 0
+
+-- Num - Numeric Types
+(+) :: Num a => a -> a -> a
+-- Eq  - Equality Types
+(=) :: Eq a => a -> a -> Bool
+-- Ord - Ordered Types
+(<) :: Ord a => a -> a -> Bool
+```
+
+# Reading Typeclasses (4/5)
 
 Nearly-complete definition from the GHC source code:
 
@@ -527,7 +657,7 @@ class  Num a  where
     negate x            = 0 - x
 ```
 
-# Reading Typeclasses (3/3)
+# Reading Typeclasses (5/5)
 
 Typeclasses are useful because they allow us to define functions that can work across a variety of types sharing common properties.
 
@@ -605,7 +735,9 @@ They have associativity and precendence (0 the weakest, 9 the strongest).
 
 # Anonymous Functions
 
-Anonymous functions can be defined as follows:
+Anonymous functions help us not think about names. They can be defined as
+follows:
+
 ```haskell
 add :: Int -> Int -> Int
 add = \x y -> x + y
@@ -614,7 +746,8 @@ addFive :: Int -> Int
 addFive = \x -> add x 5
 ```
 
-They are expressions, and can be used as inputs to functions that take functions as arguments or assigned to variables.
+They are expressions, and can be used as inputs to functions that take
+functions as arguments or assigned to variables.
 ```haskell
 Prelude> map (\x -> x + 5) [1,2,3]
 [6,7,8]
@@ -733,6 +866,8 @@ want from an expression. We will cover:
     - `where`
     - `let`
     - `case...of`
+
+**Pattern Matching in Haskell is top to bottom, left to right.**
 
 # Pattern Matching: In JavaScript
 
@@ -1720,9 +1855,20 @@ hasLeadingOnes' n bs count = case BS.uncons bs of
 
 # Where to go from here
 
+- Haskell Book by Chris Allen <http://haskellbook.com/>
+
 - Learn You a Haskell by Miran Lipovača, <http://learnyouahaskell.com>
 
 - Gentle Introduction To Haskell, version 98 by Paul Hudak, John Peterson, and Joseph Fasel, <https://www.haskell.org/tutorial/>
+
+- Real World Haskell by Bryan O'Sullivan, <http://book.realworldhaskell.org/>
+
+- An emporium of resources on the Haskell wiki: <https://wiki.haskell.org/Learning_Haskell>
+
+# Video learning materials
+
+- Functional Programming Fundamentals by Dr. Erik Meijer (Video Lectures)
+  <https://channel9.msdn.com/Series/C9-Lectures-Erik-Meijer-Functional-Programming-Fundamentals/>
 
 - Haskell Course Taught by Philip Wadler, <https://www.youtube.com/watch?v=AOl2y5uW0mA&list=PLtRG9GLtNcHBv4cuh2w1cz5VsgY6adoc3>
 
