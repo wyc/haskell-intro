@@ -871,7 +871,7 @@ want from an expression. We will cover:
 
 # Pattern Matching: In JavaScript
 
-Here is an example of the same functionality with and without pattern matching in ES6:
+Here is an example of code with and without destructuring syntax in ES6:
 
 ```javascript
 const user  = {name: "Jones", age: 50,
@@ -888,6 +888,9 @@ const user = {name: "Jones", age: 50,
               email: "jones@jones.com"}
 const {name, age, email} = user
 ```
+
+While destructuring isn't pattern matching, it has a similar intent, and there
+are even proposals to add true pattern matching to the language (see references).
 
 # Pattern Matching: Matching Constants (1/2)
 
@@ -1923,5 +1926,7 @@ explanations, and more found in these slides.
 - "Gentle Introduction To Haskell, version 98", Paul Hudak, John Peterson, Joseph Fasel, <https://www.haskell.org/tutorial/>
 
 - "Algebraic data type", Haskell Wiki, <https://wiki.haskell.org/Algebraic_data_type>
+
+- ECMAScript Pattern Matching Proposal, <https://github.com/tc39/proposal-pattern-matching>
 
 # EOF
