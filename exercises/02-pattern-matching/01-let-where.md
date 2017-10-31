@@ -7,7 +7,7 @@ totalAmount subtotal = subtotal * tax
 ```
 
 2. Use the `let..in` pattern to write a function called `show3DPoint`, which
-   accepts `(x, y, z)` and prints a string representation.
+   accepts `(x, y, z)` and returns a string representation.
 
 ```
 show3DPoint :: Num a => (a, b, c) -> [Char]
