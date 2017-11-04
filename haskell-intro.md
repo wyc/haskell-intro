@@ -1,10 +1,10 @@
-% How to Learn You a Haskell
-% Wayne Chang (wayne@wyc.io)
-% May 8th, 2017
+% Getting Started In Haskell
+% Wayne Chang (wayne@wycd.net)
+% Nov 4th, 2017
 
 # Slides and Exercises
 
-After installing Git, you can run this command to download the slides and
+With Git installed, you can run this command to download the slides and
 exercises.
 
 ```bash
@@ -13,7 +13,7 @@ $ git clone https://github.com/wyc/haskell-intro.git
 
 # Table of Contents
 
-These slides _attempt_ to cover:
+These slides have coverage of:
 
 - Language Overview
 - Installation
