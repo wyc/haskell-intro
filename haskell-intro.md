@@ -342,9 +342,9 @@ Prelude> take 2 [1,2,3,4,5]
     Prelude> map addFive [1,2,3] 
     [6,7,8]
     ```
-- Reducing a list with `foldr`:
+- Reducing a list with `foldl`:
     ```haskell
-    Prelude> foldr (\acc elem -> acc + elem) 0 [1,2,3]
+    Prelude> foldl (\acc elem -> acc + elem) 0 [1,2,3]
     6
     ```
 
@@ -356,9 +356,9 @@ Prelude> take 2 [1,2,3,4,5]
     - For example,
     ```haskell
     Prelude> let point = (3,4)
-    Prelude> fst origin
+    Prelude> fst point
     3
-    Prelude> snd origin
+    Prelude> snd point
     4
     Prelude> let point3d = (3,4,5)
     Prelude> let location = ("Germany", (51.1657, 10.4515))
@@ -419,9 +419,9 @@ addFive x = x + 5
 -- mkAdder ``has type`` function that takes
 --   an Int and returns a (function that takes
 --     an Int and returns an Int)
-newAdder :: Int -> (Int -> Int)
-newAdder x = (\y -> y + x)
-addFive = (newAdder 5)
+mkAdder :: Int -> (Int -> Int)
+mkAdder x = (\y -> y + x)
+addFive = (mkAdder 5)
 ```
 
 # Reading Types (3/5)
@@ -479,7 +479,7 @@ Prelude> (addFive :: Int -> Int) 1.2 -- BOOM!
       it = (addFive :: Int -> Int) 1.2
 ```
 
-# Currying (1/2)
+# Currying (1/3)
 
 Currying is the process of transforming a function that takes multiple
 arguments into a function that takes just a single argument and returns another
@@ -500,23 +500,46 @@ addFive = add 5
 addFive 2
 ```
 
-# Currying (2/2)
+# Currying (2/3)
+
+Curried 1, 2, and 3 are equivalent.
 
 ```haskell
-add :: Int -> Int -> Int
+-- Uncurried
+add :: (Int, Int) -> Int
 add = \(x, y) -> x + y
 
+-- Curried 1
 add :: Int -> Int -> Int
 add x y = x + y
 
+-- Curried 2
 add :: Int -> (Int -> Int)
 add x = (\y -> x + y)
 
+-- Curried 3
 add :: (Int -> (Int -> Int))
 add = (\x -> (\y -> x + y))
+```
 
--- Arrow is Right-Associative
--- (Int -> Int -> Int) is (Int -> (Int -> Int))
+# Currying (3/3)
+
+The arrow operator is right-associative. Each value we apply returns a value
+conforming to "the rest" of the type signature.
+
+```haskell
+a -> a -> a -> a
+a -> a -> (a -> a)
+a -> (a -> (a -> a))
+```
+
+Function application is left-associative due to currying. It "cancels out"
+because we apply values one at a time.
+
+```haskell
+f a b c
+(f a) b c
+((f a) b) c
 ```
 
 # Reading the Type of `map` (1/3)
@@ -606,7 +629,7 @@ Prelude> addFive 1.2
 
 # Reading Typeclasses (2/5)
 
-List function examples:
+List function examples with type variables:
 
 ```haskell
 fst :: (a,b) -> a
@@ -631,7 +654,7 @@ sum = foldl (+) 0
 -- Num - Numeric Types
 (+) :: Num a => a -> a -> a
 -- Eq  - Equality Types
-(=) :: Eq a => a -> a -> Bool
+(==) :: Eq a => a -> a -> Bool
 -- Ord - Ordered Types
 (<) :: Ord a => a -> a -> Bool
 ```
@@ -688,7 +711,7 @@ Prelude> 5 + 5
 They are of type `a -> b -> c`.
 
 ```haskell
-Prelude> :t +
+Prelude> :t (+)
 (+) :: Num a => a -> a -> a
 ```
 
@@ -1204,7 +1227,7 @@ Enter sum types!
 ```haskell
 -- Person is a sum type with zero-argument value
 --   constructors of Employee, Manager, and Client.
-data Person = Employee | Manager | Client
+data PersonType = Employee | Manager | Client
 
 greet :: PersonType -> String
 greet pt = case pt of
@@ -1287,9 +1310,9 @@ $ ./test
 Arrive by 2017-05-08 10:04:09.234585398 UTC
 ```
 
-# Algebriac Data Types
+# Algebraic Data Types
 
-Sum and product types together make up the _algebriac data types_ (ADTs) in Haskell. These are not to be confused with _abstract data types_. There are also _generic algebriac data types_ (GADTs), but those are out of scope for this presentation.
+Sum and product types together make up the _algebraic data types_ (ADTs) in Haskell. These are not to be confused with _abstract data types_. There are also _generic algebraic data types_ (GADTs), but those are out of scope for this presentation.
 
 ```haskell
 -- Sum Types are combined with '|',
@@ -1328,7 +1351,8 @@ data Color = RGB Int Int Int
 RGB :: Int -> Int -> Int -> Color
 ```
 
-For all practical purposes you can just think of data constructors as constants belonging to a type.
+For all practical purposes you can just think of data constructors as constants
+belonging to a type.
 
 # Namespaces and Constructors (3/12)
 
@@ -1518,7 +1542,7 @@ data List a = Nil | Cons a (List a)
 
 # Namespaces and Constructors (11/12)
 
-Here is an example of a recursive type definition:
+Let's re-examine our recursive type definition:
 
 ```haskell
 data List a = Nil | Cons a (List a)
@@ -1556,7 +1580,7 @@ head []                 =  badHead
 
 Records are a way to generate accessor functions for a constructed value.
 
-With records:
+Without records:
 ```haskell
 data Person = Person String Int deriving Show
 Prelude> :t Person "Fred" 5
