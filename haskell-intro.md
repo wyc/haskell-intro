@@ -617,7 +617,7 @@ Prelude> :t [False,True,False]
 # Reading Typeclasses (1/5)
 
 `Num` is a typeclass that defines some common numeric operations. Think
-interfaces in Java or Go, except that typeclasses apply to types.
+interfaces in Java or Go.
 
 ```haskell
 Prelude> let addFive x = x + 5
