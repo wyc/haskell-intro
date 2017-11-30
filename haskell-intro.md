@@ -751,7 +751,14 @@ infixl 0 ~ -- left associative
 -- a ~ b ~ c becomes (a ~ b) ~ c
 
 infix  0 ~ -- non-associative
--- a ~ b ~ c becomes (a ~ b) ~ c OR a ~ (b ~ c)
+-- a ~ b ~ c is indeterminable.
+-- The compiler cannot decide if it's (a ~ b) ~ c OR a ~ (b ~ c)
+
+Prelude> a ~ b ~ c
+<interactive>:1:1: error:
+    Precedence parsing error
+        cannot mix ‘~’ [infix 0] and ‘~’ [infix 0] in the same infix expression
+
 ```
 
 They have associativity and precendence (0 the weakest, 9 the strongest).
@@ -794,7 +801,7 @@ about what the execution would be.
 
 # Symbols Related to Evaluation Order
 
-You will encouner two symbols that help dictate order of evaluation, `$` is known as _application_, and `.` is known as _function composition_.
+You will encounter two symbols that help dictate order of evaluation, `$` is known as _application_, and `.` is known as _function composition_.
 
 - `($)` calls the function which is its left-hand argument on the value which is its right-hand argument.
 ```haskell
@@ -1191,7 +1198,7 @@ type PersonType string
 
 Disadvantages:
 
-- Strings are expensive to pass around
+- Strings are expensive when checking for equality
 - Strings are OVERKILL. $c^{strlen}$ possibilities!
 - Someone can just decide to invent a new type via cast: `PersonType("Daughter")`
 - No exhaustiveness checks
